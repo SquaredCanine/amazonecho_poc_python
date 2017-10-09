@@ -125,7 +125,23 @@ def get_color_from_session(intent, session):
         intent['name'], speech_output, reprompt_text, should_end_session))
 
 
+def get_traveler_response(intent, session):
+    print('TravelerResponse')
+
+
+def get_cheapest_option(intent, session):
+    print('CheapestOption')
+
+
+def get_location_intent_response(intent, session):
+    print('location intent')
+
+
+def get_composition_intent_response(intent, session):
+    print('composition intent')
+
 # --------------- Events ------------------
+
 
 def on_session_started(session_started_request, session):
     """ Called when the session starts """
@@ -155,10 +171,15 @@ def on_intent(intent_request, session):
     intent_name = intent_request['intent']['name']
 
     # Dispatch to your skill's intent handlers
-    if intent_name == "MyColorIsIntent":
-        return set_color_in_session(intent, session)
-    elif intent_name == "WhatsMyColorIntent":
-        return get_color_from_session(intent, session)
+
+    if intent_name == "Traveler":
+        return get_traveler_response(intent, session)
+    elif intent_name == "Cheapest":
+        return get_cheapest_option(intent, session)
+    elif intent_name == "LocationIntent":
+        return get_location_intent_response(intent, session)
+    elif intent_name == "CompositionIntent":
+        return get_composition_intent_response(intent, session)
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
@@ -191,9 +212,9 @@ def lambda_handler(event, context):
     prevent someone else from configuring a skill that sends requests to this
     function.
     """
-    # if (event['session']['application']['applicationId'] !=
-    #         "amzn1.echo-sdk-ams.app.[unique-value-here]"):
-    #     raise ValueError("Invalid Application ID")
+    if (event['session']['application']['applicationId'] !=
+            "amzn1.ask.skill.66142f7e-bdee-46ae-ba88-d6629c9683f3"):
+        raise ValueError("Invalid Application ID")
 
     if event['session']['new']:
         on_session_started({'requestId': event['request']['requestId']},
