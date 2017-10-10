@@ -12,6 +12,15 @@ from __future__ import print_function
 
 # --------------- Helpers that build all of the responses ----------------------
 
+def delegate_directive(intent):
+    delegate = {
+            'type': 'Dialog.Delegate',
+            'updatedIntent': intent
+    }
+    print(delegate)
+    return delegate
+
+
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return {
         'outputSpeech': {
@@ -40,6 +49,17 @@ def build_response(session_attributes, speechlet_response):
         'response': speechlet_response
     }
 
+def build_dialog(intent):
+    return {
+        'version': '1.0',
+        'response': {
+            'directives': [
+                delegate_directive(intent)
+            ],
+            'shouldEndSession': 'false'
+        },
+        'sessionAttributes': {}
+    }
 
 # --------------- Functions that control the skill's behavior ------------------
 
@@ -127,18 +147,26 @@ def get_color_from_session(intent, session):
 
 def get_traveler_response(intent, session):
     print('TravelerResponse')
+    print(intent)
+    print(session)
 
 
 def get_cheapest_option(intent, session):
     print('CheapestOption')
+    print(intent)
+    print(session)
 
 
 def get_location_intent_response(intent, session):
     print('location intent')
+    print(intent)
+    print(session)
 
 
 def get_composition_intent_response(intent, session):
     print('composition intent')
+    print(intent)
+    print(session)
 
 # --------------- Events ------------------
 
@@ -166,11 +194,15 @@ def on_intent(intent_request, session):
 
     print("on_intent requestId=" + intent_request['requestId'] +
           ", sessionId=" + session['sessionId'])
+    print(intent_request)
 
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']
+    dialogstate = intent_request['dialogState']
 
     # Dispatch to your skill's intent handlers
+    if dialogstate == 'STARTED' or dialogstate == 'IN_PROGRESS':
+        return build_dialog(intent)
 
     if intent_name == "Traveler":
         return get_traveler_response(intent, session)
@@ -213,7 +245,7 @@ def lambda_handler(event, context):
     function.
     """
     if (event['session']['application']['applicationId'] !=
-            "amzn1.ask.skill.66142f7e-bdee-46ae-ba88-d6629c9683f3"):
+            "amzn1.ask.skill.df22d8e8-7b48-4d1a-b370-d0601cddcaee"):
         raise ValueError("Invalid Application ID")
 
     if event['session']['new']:
