@@ -8,6 +8,7 @@ http://amzn.to/1LGWsLG
 """
 
 from __future__ import print_function
+import nsi
 
 
 # --------------- Helpers that build all of the responses ----------------------
@@ -109,17 +110,22 @@ def get_traveler_response(intent, session):
     destination = intent['slots']['toCity']['value']
     origin = intent['slots']['fromCity']['value']
     outputtext = 'You want to go to ' + destination + ' and you are travelling from ' + origin + ". "
-    if intent['slots']['date'].get['value']:
+    if 'value' in intent['slots']['date']:
         date = intent['slots']['date']['value']
         outputtext += 'On ' + date + ". "
-    if intent['slots']['juncture'].get['value']:
+    if 'value' in intent['slots']['juncture']:
         juncture = intent['slots']['juncture']['value']
         arrival = True if juncture == 'arrival' else False
         outputtext += 'And you want to ' + juncture + ' '
-    if intent['slots']['time'].get['value']:
+    if 'value' in intent['slots']['time']:
         time = intent['slots']['time']['value']
         outputtext += 'At ' + time + '. '
 
+    origincode = nsi.get_stationname_response(origin)['data']['stations'][0]['code']
+    destinationcode = nsi.get_stationname_response(destination)['data']['stations'][0]['code']
+    timetable = nsi.get_price_and_time_response(origincode, destinationcode, '20171010', '1800', 2, 'departure')
+    amount_of_connections = len(timetable['data']['connections'])
+    outputtext += 'There are ' + str(amount_of_connections) + ' options available'
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
 
