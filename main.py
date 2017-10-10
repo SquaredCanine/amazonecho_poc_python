@@ -108,7 +108,18 @@ def get_traveler_response(intent, session):
     print(session)
     destination = intent['slots']['toCity']['value']
     origin = intent['slots']['fromCity']['value']
-    outputtext = 'You want to go to ' + destination + ' and you are travelling from ' + origin
+    outputtext = 'You want to go to ' + destination + ' and you are travelling from ' + origin + ". "
+    if intent['slots']['date'].get['value']:
+        date = intent['slots']['date']['value']
+        outputtext += 'On ' + date + ". "
+    if intent['slots']['juncture'].get['value']:
+        juncture = intent['slots']['juncture']['value']
+        outputtext += 'And you want to ' + juncture + ' '
+    if intent['slots']['time'].get['value']:
+        time = intent['slots']['time']['value']
+        outputtext += 'At ' + time + '. '
+
+
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
 
