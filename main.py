@@ -11,6 +11,10 @@ from __future__ import print_function
 import time
 import nsi
 
+global journeyhasbeenselected
+journeyhasbeenselected = False
+global possible_connections
+possible_connections = []
 # --------------- Helpers that build all of the responses ----------------------
 
 
@@ -128,7 +132,7 @@ def get_traveler_response(intent, session):
     current_time = time.strftime('%H%M')
     timetable = nsi.get_price_and_time_response(origincode, destinationcode, current_date, current_time, 2, 'departure')
     all_connections = timetable['data']['connections']
-    possible_connections = []
+    global possible_connections
     counter = 0
     for element in all_connections:
         if element['status'] == 'bookable':
@@ -142,8 +146,27 @@ def get_traveler_response(intent, session):
     for element in possible_connections:
         outputtext += 'The ' + ordinal_number_list[counter] + ' option is arrival at ' + element['destination']['arrival']['planned'].split()[1] + '. '
         counter += 1
-
+    if counter == 0:
+        outputtext += "There are no options available, try choosing a different date"
+    else:
+        outputtext += "Which option do you choose?"
+        global journeyhasbeenselected
+        journeyhasbeenselected = True
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
+
+
+def get_choose_intent_response(intent, session):
+    print("ChooseIntent")
+    print(intent)
+    print(session)
+    global possible_connections
+    option = int(intent['slots']['option']['value']) - 1
+    if option < 0:
+        option = 0
+    elif option > 2:
+        option = 2
+    if len(possible_connections) - 1 > option:
+        option = 0
 
 
 def get_cheapest_option(intent, session):
@@ -212,6 +235,8 @@ def on_intent(intent_request, session):
         return get_location_intent_response(intent, session)
     elif intent_name == "CompositionIntent":
         return get_composition_intent_response(intent, session)
+    elif intent_name == "ChooseIntent" and journeyhasbeenselected:
+        return get_choose_intent_response(intent, session)
     else:
         raise ValueError("Invalid intent")
 
