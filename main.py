@@ -8,6 +8,7 @@ http://amzn.to/1LGWsLG
 """
 
 from __future__ import print_function
+import time as time
 import nsi
 
 
@@ -118,12 +119,14 @@ def get_traveler_response(intent, session):
         arrival = True if juncture == 'arrival' else False
         outputtext += 'And you want to ' + juncture + ' '
     if 'value' in intent['slots']['time']:
-        time = intent['slots']['time']['value']
-        outputtext += 'At ' + time + '. '
+        chosentime = intent['slots']['time']['value']
+        outputtext += 'At ' + chosentime + '. '
 
     origincode = nsi.get_stationname_response(origin)['data']['stations'][0]['code']
     destinationcode = nsi.get_stationname_response(destination)['data']['stations'][0]['code']
-    timetable = nsi.get_price_and_time_response(origincode, destinationcode, '20171010', '1800', 2, 'departure')
+    date = time.strftime('%Y%m%d')
+    time = time.strftime('%H%M')
+    timetable = nsi.get_price_and_time_response(origincode, destinationcode, 'date', 'time', 2, 'departure')
     all_connections = timetable['data']['connections']
     outputtext += 'There are ' + str(len(all_connections)) + ' options available. '
     possible_connections = []
