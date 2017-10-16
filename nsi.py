@@ -24,4 +24,4 @@ def get_stationname_response(name):
     return response.json()
 
 def provisional_booking_request(selectedjourney, selectedclass):
-    
+    print('je moeder')

@@ -167,6 +167,8 @@ def get_choose_intent_response(intent, session):
         option = 2
     if len(possible_connections) - 1 > option:
         option = 0
+    outputtext = "You selected option " + str(option)
+    return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
 
 def get_cheapest_option(intent, session):
