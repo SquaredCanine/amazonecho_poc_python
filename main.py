@@ -152,7 +152,7 @@ def get_traveler_response(intent, session):
         outputtext += "Which option do you choose?"
         global journeyhasbeenselected
         journeyhasbeenselected = True
-    return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
+    return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'false'))
 
 
 def get_choose_intent_response(intent, session):
