@@ -140,7 +140,7 @@ def get_traveler_response(intent, session):
     ordinal_number_list = ['first', 'second', 'third']
     counter = 0
     for element in possible_connections:
-        outputtext += 'The ' + ordinal_number_list[counter] + ' option is arrival at ' + element['destination']['arrival']['planned'] + '. '
+        outputtext += 'The ' + ordinal_number_list[counter] + ' option is arrival at ' + element['destination']['arrival']['planned'].split()[1] + '. '
         counter += 1
 
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
