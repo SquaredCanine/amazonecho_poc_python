@@ -8,11 +8,11 @@ http://amzn.to/1LGWsLG
 """
 
 from __future__ import print_function
-import time as time
+import time
 import nsi
 
-
 # --------------- Helpers that build all of the responses ----------------------
+
 
 def delegate_directive(intent):
     delegate = {
@@ -124,9 +124,9 @@ def get_traveler_response(intent, session):
 
     origincode = nsi.get_stationname_response(origin)['data']['stations'][0]['code']
     destinationcode = nsi.get_stationname_response(destination)['data']['stations'][0]['code']
-    date = time.strftime('%Y%m%d')
-    time = time.strftime('%H%M')
-    timetable = nsi.get_price_and_time_response(origincode, destinationcode, 'date', 'time', 2, 'departure')
+    current_date = time.strftime('%Y%m%d')
+    current_time = time.strftime('%H%M')
+    timetable = nsi.get_price_and_time_response(origincode, destinationcode, current_date, current_time, 2, 'departure')
     all_connections = timetable['data']['connections']
     outputtext += 'There are ' + str(len(all_connections)) + ' options available. '
     possible_connections = []
