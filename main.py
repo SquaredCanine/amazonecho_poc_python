@@ -130,13 +130,14 @@ def get_traveler_response(intent, session):
     all_connections = timetable['data']['connections']
     outputtext += 'There are ' + str(len(all_connections)) + ' options available. '
     possible_connections = []
-    index = 0
+    counter = 0
     for element in all_connections:
         if element['status'] == 'bookable':
-            possible_connections[index] = element
-            index += 1
-        if index == 3:
+            possible_connections.append(element)
+            counter += 1
+        if counter == 3:
             break
+    counter = 0
     ordinal_number_list = ['first', 'second', 'third']
     for index, element in possible_connections:
         outputtext += 'The ' + ordinal_number_list[index] + ' option is arrival at ' + element['destination']['arrival']['planned'] + '. '
