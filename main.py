@@ -128,7 +128,6 @@ def get_traveler_response(intent, session):
     current_time = time.strftime('%H%M')
     timetable = nsi.get_price_and_time_response(origincode, destinationcode, current_date, current_time, 2, 'departure')
     all_connections = timetable['data']['connections']
-    outputtext += 'There are ' + str(len(all_connections)) + ' options available. '
     possible_connections = []
     counter = 0
     for element in all_connections:
@@ -137,10 +136,12 @@ def get_traveler_response(intent, session):
             counter += 1
         if counter == 3:
             break
-    counter = 0
+    outputtext += 'There are ' + str(len(possible_connections)) + ' options available. '
     ordinal_number_list = ['first', 'second', 'third']
-    for index, element in possible_connections:
-        outputtext += 'The ' + ordinal_number_list[index] + ' option is arrival at ' + element['destination']['arrival']['planned'] + '. '
+    counter = 0
+    for element in possible_connections:
+        outputtext += 'The ' + ordinal_number_list[counter] + ' option is arrival at ' + element['destination']['arrival']['planned'] + '. '
+        counter += 1
 
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
