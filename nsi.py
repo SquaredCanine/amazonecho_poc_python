@@ -3,7 +3,7 @@ import requests
 base_url = 'https://www.nsinternational.nl/api/v1.1/'
 price_and_time_request_url = 'connections/'
 stationname_request_url = 'stations/'
-provisional_booking_request_url = 'bookings/provision'
+provisional_booking_request_url = 'bookings/provision/'
 
 
 def get_price_and_time_response(origincode, destinationcode, date, time, amount_of_passengers, juncture):
@@ -41,7 +41,7 @@ def provisional_booking_request(uid, selectedjourney, selectedclass, amount_of_p
     },
         'passengers': passengers
     }
-    full_url = provisional_booking_request_url + userid + '?origin=' + origincode + '&destination=' + destinationcode \
+    full_url = base_url + provisional_booking_request_url + userid + '?origin=' + origincode + '&destination=' + destinationcode \
                + '&lang=nl '
     response = requests.post(full_url, body)
     return response.json()
