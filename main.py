@@ -10,6 +10,7 @@ http://amzn.to/1LGWsLG
 from __future__ import print_function
 import time
 import nsi
+import database
 
 global journeyhasbeenselected
 journeyhasbeenselected = False
@@ -164,14 +165,15 @@ def get_choose_intent_response(intent, session):
     print(intent)
     print(session)
     global possible_connections
-    option = int(intent['slots']['option']['value']) - 1
+    option = int(intent['slots']['option']['value'])
+    outputtext = "You selected option " + str(option)
+    option =- 1
     if option < 0:
         option = 0
     elif option > 2:
         option = 2
     if len(possible_connections) - 1 > option:
         option = 0
-    outputtext = "You selected option " + str(option)
     response = nsi.provisional_booking_request(unique_ns_id, possible_connections[option], 0, 2)
     print('https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature='
           + response['data']['signature'])
