@@ -173,7 +173,7 @@ def get_choose_intent_response(intent, session):
         option = 0
     outputtext = "You selected option " + str(option)
     response = nsi.provisional_booking_request(unique_ns_id, possible_connections[option], 0, 2)
-    print('https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['signature'] + '?signature='
+    print('https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature='
           + response['data']['signature'])
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
