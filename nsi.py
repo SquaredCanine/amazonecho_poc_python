@@ -35,22 +35,25 @@ def provisional_booking_request(uid, selectedjourney, selectedclass, amount_of_p
     destinationcode = selectedjourney['destination']['code']
     passengers = 'passengers='
     passengers += 'A,' * amount_of_passengers
-    body = {'outbound': {
-        'connectionId': connectionid,
-        'offerId': offerid,
-        'seatReservation': seatreservation
+    body = {"outbound": {
+        "connectionId": connectionid,
+        "offerId": offerid,
+        "seatReservation": seatreservation
     },
-        'passengers': passengers
+        "passengers": passengers
     }
     full_url = base_url + provisional_booking_request_url + userid + '?origin=' + origincode + '&destination=' + destinationcode \
                + '&lang=nl '
     alternate_url = base_url + alternative_booking_request_url + userid + '?origin=' + origincode + '&destination=' + destinationcode \
                + '&lang=nl '
-    response = requests.post(full_url, body)
+    response = requests.post(full_url, json=body).content
+    print('full url: ' + full_url)
+    print('alternate url: ' + alternate_url)
+    print('body: ' + str(body))
     print(response)
     if response:
-        return response.json()
+        return response
     else:
         response = requests.post(alternate_url, body)
         print('alternative option: ' + response)
-        return response.json()
+        return response.content
