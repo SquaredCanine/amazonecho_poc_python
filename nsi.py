@@ -1,5 +1,5 @@
 import requests
-
+import _json
 base_url = 'https://www.nsinternational.nl/api/v1.1/'
 price_and_time_request_url = 'connections/'
 stationname_request_url = 'stations/'
@@ -33,7 +33,7 @@ def provisional_booking_request(uid, selectedjourney, selectedclass, amount_of_p
     seatreservation = 'true'
     origincode = selectedjourney['origin']['code']
     destinationcode = selectedjourney['destination']['code']
-    passengers = 'passengers='
+    passengers = ''
     passengers += 'A,' * amount_of_passengers
     body = {"outbound": {
         "connectionId": connectionid,
@@ -43,17 +43,23 @@ def provisional_booking_request(uid, selectedjourney, selectedclass, amount_of_p
         "passengers": passengers
     }
     full_url = base_url + provisional_booking_request_url + userid + '?origin=' + origincode + '&destination=' + destinationcode \
-               + '&lang=nl '
+               + '&lang=nl'
     alternate_url = base_url + alternative_booking_request_url + userid + '?origin=' + origincode + '&destination=' + destinationcode \
-               + '&lang=nl '
-    response = requests.post(full_url, json=body).content
+               + '&lang=nl'
+    response = requests.post(full_url, json={"outbound": {
+        "connectionId": connectionid,
+        "offerId": offerid,
+        "seatReservation": seatreservation
+    },
+        "passengers": passengers
+    })
     print('full url: ' + full_url)
     print('alternate url: ' + alternate_url)
     print('body: ' + str(body))
-    print(response)
+    print(response.json())
     if response:
-        return response
+        return response.json()
     else:
         response = requests.post(alternate_url, body)
         print('alternative option: ' + response)
-        return response.content
+        return response.json()
