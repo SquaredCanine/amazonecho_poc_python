@@ -15,6 +15,8 @@ global journeyhasbeenselected
 journeyhasbeenselected = False
 global possible_connections
 possible_connections = []
+global unique_ns_id
+unique_ns_id = ''
 # --------------- Helpers that build all of the responses ----------------------
 
 
@@ -132,6 +134,8 @@ def get_traveler_response(intent, session):
     current_time = time.strftime('%H%M')
     timetable = nsi.get_price_and_time_response(origincode, destinationcode, current_date, current_time, 2, 'departure')
     all_connections = timetable['data']['connections']
+    global unique_ns_id
+    unique_ns_id = timetable['data']['uid']
     global possible_connections
     counter = 0
     for element in all_connections:
@@ -168,6 +172,9 @@ def get_choose_intent_response(intent, session):
     if len(possible_connections) - 1 > option:
         option = 0
     outputtext = "You selected option " + str(option)
+    response = nsi.provisional_booking_request(unique_ns_id, possible_connections[option], 0, 2)
+    print('https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['signature'] + '?signature='
+          + response['data']['signature'])
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
 
