@@ -1,11 +1,11 @@
 import mysql.connector
 import os
 
-username = os.environ('db_username')
-location = os.environ('db_location')
-name = os.environ('db_name')
-port = os.environ('db_port')
-password = os.environ('db_password')
+username = os.environ['db_username']
+location = os.environ['db_location']
+name = os.environ['db_name']
+port = os.environ['db_port']
+password = os.environ['db_password']
 global cnx, cursor
 cnx = None
 cursor = None
@@ -19,12 +19,12 @@ def initialize():
 
 def get_journey_identifier(UID):
     global cursor, cnx
-    query = ("SELECT max(identifier) FROM Journey WHERE UID = %s")
-    cursor.execute(query, (UID))
+    query = "SELECT max(identifier) FROM Journey WHERE UID = %s"
+    cursor.execute(query, (UID, ))
     for element in cursor:
-        print(element)
+        print(element[0])
     cnx.close
-    return element
+    return element[0]
 
 
 def add_journey():
@@ -34,4 +34,3 @@ def add_journey():
     for element in cursor:
         print(element)
     cnx.close()
-
