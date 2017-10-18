@@ -17,8 +17,18 @@ def initialize():
     cursor = cnx.cursor()
 
 
+def get_journey_identifier(UID):
+    global cursor, cnx
+    query = ("SELECT max(identifier) FROM Journey WHERE UID = %s")
+    cursor.execute(query, (UID))
+    for element in cursor:
+        print(element)
+    cnx.close
+    return element
+
+
 def add_journey():
-    global cursor,cnx
+    global cursor, cnx
     query = ("SELECT * FROM mydb.Journey")
     cursor.execute(query)
     for element in cursor:
