@@ -18,6 +18,7 @@ def initialize():
 
 
 def get_journey_identifier(UID):
+    initialize()
     global cursor, cnx
     query = "SELECT max(identifier) FROM Journey WHERE UID = %s"
     cursor.execute(query, (UID, ))
@@ -28,6 +29,7 @@ def get_journey_identifier(UID):
 
 
 def add_journey(selectedjourney, UID, selectedclass):
+    initialize()
     global cursor, cnx
     origincode = selectedjourney['origin']['code']
     destinationcode = selectedjourney['destination']['code']

@@ -146,7 +146,7 @@ def get_traveler_response(intent, session):
         if counter == 3:
             break
     outputtext += 'There are ' + str(len(possible_connections)) + ' options available. '
-    ordinal_number_list = ['first', 'second', 'third']
+    ordinal_number_list = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
     counter = 0
     for element in possible_connections:
         outputtext += 'The ' + ordinal_number_list[counter] + ' option is arrival at ' + element['destination']['arrival']['planned'].split()[1] + '. '
