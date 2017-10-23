@@ -177,7 +177,7 @@ def get_choose_intent_response(intent, session):
     response = nsi.provisional_booking_request(unique_ns_id, possible_connections[option], 0, 2)
     print('https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature='
           + response['data']['signature'])
-    response = database.add_journey(possible_connections[option], unique_ns_id, 0)
+    response = database.add_journey(possible_connections[option], session['user']['userId'], 0)
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
 
