@@ -167,7 +167,7 @@ def get_choose_intent_response(intent, session):
     global possible_connections
     option = int(intent['slots']['option']['value'])
     outputtext = "You selected option " + str(option)
-    option =- 1
+    option -= 1
     if option < 0:
         option = 0
     elif option > 2:
@@ -177,6 +177,7 @@ def get_choose_intent_response(intent, session):
     response = nsi.provisional_booking_request(unique_ns_id, possible_connections[option], 0, 2)
     print('https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature='
           + response['data']['signature'])
+    response = database.add_journey(possible_connections[option], unique_ns_id, 0)
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
 

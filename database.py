@@ -27,10 +27,16 @@ def get_journey_identifier(UID):
     return element[0]
 
 
-def add_journey():
+def add_journey(selectedjourney, UID, selectedclass):
     global cursor, cnx
-    query = ("SELECT * FROM mydb.Journey")
-    cursor.execute(query)
+    origincode = selectedjourney['origin']['code']
+    destinationcode = selectedjourney['destination']['code']
+    departuretime = selectedjourney['origin']['departure']['planned'].split()[0].replace(':','')
+    departuredate = selectedjourney['origin']['departure']['planned'].split()[1].replace('-','')
+    orderprice = selectedjourney['offers'][selectedclass]['salesPrice']['amount']
+    identifier = get_journey_identifier(UID) + 1
+    query = "INSERT INTO mydb.Journey ('UID','identifier','originCode','destinationCode','departuretime','departuredate','orderprice') VALUES (%s,%s,%s,%s,%s,%s,%s)"
+    cursor.execute(query, (UID, identifier, origincode, destinationcode, departuretime, departuredate, orderprice))
     for element in cursor:
         print(element)
     cnx.close()
