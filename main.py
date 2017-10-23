@@ -143,8 +143,9 @@ def get_traveler_response(intent, session):
         if element['status'] == 'bookable':
             possible_connections.append(element)
             counter += 1
-        if counter == 3:
+        if counter >= 3:
             break
+    print(str(len(possible_connections)))
     outputtext += 'There are ' + str(len(possible_connections)) + ' options available. '
     ordinal_number_list = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
     counter = 0
