@@ -50,6 +50,6 @@ def get_user_email(UID):
     query = "SELECT email FROM Users WHERE UID= %s"
     cursor.execute(query, (UID, ))
     for element in cursor:
-        print(element)
+        email = element
     cnx.close()
-    return element[0]
+    return email
