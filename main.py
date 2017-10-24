@@ -181,6 +181,7 @@ def get_choose_intent_response(intent, session):
     if len(possible_connections) - 1 > option:
         option = 0
     selected_journey = possible_connections[option]
+    print(selected_journey)
     response = nsi.provisional_booking_request(unique_ns_id, selected_journey, 0, 2)
     gotourl = 'https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature=' \
               + response['data']['signature']
@@ -195,8 +196,8 @@ def get_choose_intent_response(intent, session):
                   ', from ' + selected_journey['origin']['name'] + \
                   '. Your journey will be ' + selected_journey['duration']['hours'] + ' hours and ' + \
                   selected_journey['duration']['minutes'] + ' minutes long. ' \
-                  ' And you will arrive on ' + selected_journey['destination']['arrival']['planned'].split[1] + \
-                  ' at ' + str(selected_journey['destination']['name']) + ". "
+                  ' And you will arrive on ' + selected_journey['destination']['arrival']['planned'].split()[1] + \
+                  ' at ' + str(selected_journey['destination']['name']) + '. '
     outputtext += 'Go to your email to finish the booking. '
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
