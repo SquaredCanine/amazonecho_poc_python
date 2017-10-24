@@ -170,7 +170,7 @@ def get_choose_intent_response(intent, session):
     print("ChooseIntent")
     print(intent)
     print(session)
-    global possible_connections, journeyhasbeenselected
+    global possible_connections
     option = int(intent['slots']['option']['value'])
     outputtext = 'You have chosen option ' + str(option) + '. '
     option -= 1
@@ -198,8 +198,6 @@ def get_choose_intent_response(intent, session):
                   ' And you will arrive on ' + selected_journey['destination']['arrival']['planned'].split[1] + \
                   ' at ' + str(selected_journey['destination']['name']) + ". "
     outputtext += 'Go to your email to finish the booking. '
-    journeyhasbeenselected = False
-    possible_connections = []
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
 
@@ -283,7 +281,9 @@ def on_session_ended(session_ended_request, session):
     """
     print("on_session_ended requestId=" + session_ended_request['requestId'] +
           ", sessionId=" + session['sessionId'])
-    # add cleanup logic here
+    global possible_connections, journeyhasbeenselected
+    possible_connections = []
+    journeyhasbeenselected = False
 
 
 # --------------- Main handler ------------------
