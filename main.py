@@ -172,7 +172,7 @@ def get_choose_intent_response(intent, session):
     print(session)
     global possible_connections
     option = int(intent['slots']['option']['value'])
-    outputtext = "You selected option " + str(option) + '. '
+    outputtext = 'You have chosen option ' + str(option) + '. '
     option -= 1
     if option < 0:
         option = 0
@@ -180,16 +180,24 @@ def get_choose_intent_response(intent, session):
         option = 2
     if len(possible_connections) - 1 > option:
         option = 0
-    response = nsi.provisional_booking_request(unique_ns_id, possible_connections[option], 0, 2)
-    gotourl = 'https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature='\
+    selected_journey = possible_connections[option]
+    response = nsi.provisional_booking_request(unique_ns_id, selected_journey, 0, 2)
+    gotourl = 'https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature=' \
               + response['data']['signature']
     print(gotourl)
-    database.add_journey(possible_connections[option], session['user']['userId'], 0)
-
+    database.add_journey(selected_journey, session['user']['userId'], 0)
     user_email = database.get_user_email(session['user']['userId'])
     mailclient.set_destination(user_email)
-    mailclient.set_body(possible_connections[option], gotourl)
+    mailclient.set_body(selected_journey, gotourl)
     mailclient.send_mail()
+
+    outputtext += 'You will depart at ' + selected_journey['origin']['departure']['planned'].split()[1] + \
+                  ', from ' + selected_journey['origin']['name'] + \
+                  '. Your journey will be ' + selected_journey['duration']['hours'] + ' hours and ' + \
+                  selected_journey['duration']['minutes'] + ' minutes long. ' \
+                  ' And you will arrive on ' + selected_journey['destination']['arrival']['planned'].split[1] + \
+                  ' at ' + selected_journey['destination']['name'] + ". "
+    outputtext += 'Go to your email to finish the booking. '
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
 
