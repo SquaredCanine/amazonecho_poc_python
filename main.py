@@ -170,7 +170,7 @@ def get_choose_intent_response(intent, session):
     print("ChooseIntent")
     print(intent)
     print(session)
-    global possible_connections
+    global possible_connections, journeyhasbeenselected
     option = int(intent['slots']['option']['value'])
     outputtext = 'You have chosen option ' + str(option) + '. '
     option -= 1
@@ -196,8 +196,10 @@ def get_choose_intent_response(intent, session):
                   '. Your journey will be ' + selected_journey['duration']['hours'] + ' hours and ' + \
                   selected_journey['duration']['minutes'] + ' minutes long. ' \
                   ' And you will arrive on ' + selected_journey['destination']['arrival']['planned'].split[1] + \
-                  ' at ' + selected_journey['destination']['name'] + ". "
+                  ' at ' + str(selected_journey['destination']['name']) + ". "
     outputtext += 'Go to your email to finish the booking. '
+    journeyhasbeenselected = False
+    possible_connections = []
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
 
