@@ -37,11 +37,12 @@ def set_body(journey, gotoUrl):
 
 
 def set_destination(email):
+    global destination
     destination.append(email)
 
 
 def send_mail():
-    global content
+    global content, destination
     try:
         msg = MIMEText(content, text_subtype)
         msg['Subject'] = subject
@@ -55,6 +56,7 @@ def send_mail():
             conn.sendmail(sender, destination, msg.as_string())
         finally:
             conn.quit()
+            destination = []
             return True
     except Exception:
         print(sys.exc_info()[0])
