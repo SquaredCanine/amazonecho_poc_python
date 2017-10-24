@@ -28,7 +28,7 @@ def set_body(journey, gotoUrl):
               'Vertrek van: ' + journey['origin']['name'] + '</div>' \
               '<br>' \
               '<div style=\'border-left:6px solid;border-color:#0000FF;color:#000;background-color:#eedddd;padding-left:16px\'>Aankomst om: ' \
-              + journey['destination']['arrival']['planned'].split()[0] + '<br>' \
+              + journey['destination']['arrival']['planned'].split()[1] + '<br>' \
               'Aankomst op: ' + journey['destination']['name'] + '</div>' \
               '<br>' \
               '<b>Totale prijs: ' + journey['offers'][0]['salesPrice']['amount'] + ' </b>' \
