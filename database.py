@@ -44,12 +44,12 @@ def add_journey(selectedjourney, UID, selectedclass):
     cnx.close()
 
 
-def get_user_email(UID):
+def get_user_email(uid):
     initialize()
     global cursor, cnx
     query = "SELECT email FROM Users WHERE UID= %s"
-    cursor.execute(query, (UID, ))
+    cursor.execute(query, (uid, ))
     for element in cursor:
-        email = element
+        print(element[0])
     cnx.close()
-    return email
+    return element[0]
