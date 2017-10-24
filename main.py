@@ -9,8 +9,9 @@ http://amzn.to/1LGWsLG
 
 from __future__ import print_function
 import time
-import nsi
 import database
+import nsi
+import mailclient
 
 current_date = time.strftime('%Y%m%d')
 current_time = time.strftime('%H%M')
@@ -20,13 +21,15 @@ global possible_connections
 possible_connections = []
 global unique_ns_id
 unique_ns_id = ''
+
+
 # --------------- Helpers that build all of the responses ----------------------
 
 
 def delegate_directive(intent):
     delegate = {
-            'type': 'Dialog.Delegate',
-            'updatedIntent': intent
+        'type': 'Dialog.Delegate',
+        'updatedIntent': intent
     }
     print(delegate)
     return delegate
@@ -80,6 +83,7 @@ def build_dialog(intent):
         },
         'sessionAttributes': {}
     }
+
 
 # --------------- Functions that control the skill's behavior ------------------
 
@@ -150,7 +154,8 @@ def get_traveler_response(intent, session):
     ordinal_number_list = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
     counter = 0
     for element in possible_connections:
-        outputtext += 'The ' + ordinal_number_list[counter] + ' option is arrival at ' + element['destination']['arrival']['planned'].split()[1] + '. '
+        outputtext += 'The ' + ordinal_number_list[counter] + ' option is arrival at ' + \
+                      element['destination']['arrival']['planned'].split()[1] + '. '
         counter += 1
     if counter == 0:
         outputtext += "There are no options available, try choosing a different date"
@@ -176,9 +181,15 @@ def get_choose_intent_response(intent, session):
     if len(possible_connections) - 1 > option:
         option = 0
     response = nsi.provisional_booking_request(unique_ns_id, possible_connections[option], 0, 2)
-    print('https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature='
-          + response['data']['signature'])
-    response = database.add_journey(possible_connections[option], session['user']['userId'], 0)
+    gotourl = 'https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature='\
+              + response['data']['signature']
+    print(gotourl)
+    database.add_journey(possible_connections[option], session['user']['userId'], 0)
+
+    user_email = database.get_user_email(session['user']['userId'])
+    mailclient.set_destination(user_email)
+    mailclient.set_body(possible_connections[option], gotourl)
+    mailclient.send_mail()
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
 
@@ -198,6 +209,7 @@ def get_composition_intent_response(intent, session):
     print('composition intent')
     print(intent)
     print(session)
+
 
 # --------------- Events ------------------
 
