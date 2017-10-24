@@ -12,6 +12,8 @@ import time
 import nsi
 import database
 
+current_date = time.strftime('%Y%m%d')
+current_time = time.strftime('%H%M')
 global journeyhasbeenselected
 journeyhasbeenselected = False
 global possible_connections
@@ -131,8 +133,6 @@ def get_traveler_response(intent, session):
 
     origincode = nsi.get_stationname_response(origin)['data']['stations'][0]['code']
     destinationcode = nsi.get_stationname_response(destination)['data']['stations'][0]['code']
-    current_date = time.strftime('%Y%m%d')
-    current_time = time.strftime('%H%M')
     timetable = nsi.get_price_and_time_response(origincode, destinationcode, current_date, current_time, 2, 'departure')
     all_connections = timetable['data']['connections']
     global unique_ns_id
@@ -167,7 +167,7 @@ def get_choose_intent_response(intent, session):
     print(session)
     global possible_connections
     option = int(intent['slots']['option']['value'])
-    outputtext = "You selected option " + str(option)
+    outputtext = "You selected option " + str(option) + '. '
     option -= 1
     if option < 0:
         option = 0
