@@ -194,10 +194,10 @@ def get_choose_intent_response(intent, session):
 
     outputtext += 'You will depart at ' + selected_journey['origin']['departure']['planned'].split()[1] + \
                   ', from ' + selected_journey['origin']['name'] + \
-                  '. Your journey will be ' + selected_journey['duration']['hours'] + ' hours and ' + \
-                  selected_journey['duration']['minutes'] + ' minutes long. ' \
+                  '. Your journey will be ' + str(selected_journey['duration']['hours']) + ' hours and ' + \
+                  str(selected_journey['duration']['minutes']) + ' minutes long. ' \
                   ' And you will arrive on ' + selected_journey['destination']['arrival']['planned'].split()[1] + \
-                  ' at ' + str(selected_journey['destination']['name']) + '. '
+                  ' at '+ selected_journey['destination']['name'] + '. '
     outputtext += 'Go to your email to finish the booking. '
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
