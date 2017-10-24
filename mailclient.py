@@ -37,7 +37,7 @@ def set_body(journey, gotoUrl):
 
 
 def set_destination(email):
-    destination = [email]
+    destination.append(email)
 
 
 def send_mail():
