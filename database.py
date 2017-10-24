@@ -42,3 +42,14 @@ def add_journey(selectedjourney, UID, selectedclass):
     cursor.execute(query, (UID, identifier, origincode, destinationcode, departuretime, departuredate, orderprice))
     cnx.commit()
     cnx.close()
+
+
+def get_user_email(UID):
+    initialize()
+    global cursor, cnx
+    query = "SELECT email FROM Users WHERE UID= %s"
+    cursor.execute(query, (UID, ))
+    for element in cursor:
+        print(element)
+    cnx.close()
+    return element[0]
