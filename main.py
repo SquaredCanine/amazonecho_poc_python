@@ -85,6 +85,23 @@ def build_dialog(intent):
     }
 
 
+def build_link_account_card(session_attributes):
+    return {
+        'version': '1.0',
+        'sessionAttributes': session_attributes,
+        'response': {
+            'outputSpeech': {
+                'type': 'PlainText',
+                'text': 'Go to your alexa app to link this skill'
+            },
+            'card': {
+                'type': 'LinkAccount'
+            },
+            'shouldEndSession': True
+        }
+    }
+
+
 # --------------- Functions that control the skill's behavior ------------------
 
 
@@ -196,8 +213,9 @@ def get_choose_intent_response(intent, session):
                   ', from ' + selected_journey['origin']['name'] + \
                   '. Your journey will be ' + str(selected_journey['duration']['hours']) + ' hours and ' + \
                   str(selected_journey['duration']['minutes']) + ' minutes long. ' \
-                  ' And you will arrive on ' + selected_journey['destination']['arrival']['planned'].split()[1] + \
-                  ' at '+ selected_journey['destination']['name'] + '. '
+                                                                 ' And you will arrive on ' + \
+                  selected_journey['destination']['arrival']['planned'].split()[1] + \
+                  ' at ' + selected_journey['destination']['name'] + '. '
     outputtext += 'Go to your email to finish the booking. '
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
@@ -225,7 +243,6 @@ def get_composition_intent_response(intent, session):
 
 def on_session_started(session_started_request, session):
     """ Called when the session starts """
-
     print("on_session_started requestId=" + session_started_request['requestId']
           + ", sessionId=" + session['sessionId'])
 
@@ -308,6 +325,9 @@ def lambda_handler(event, context):
     if event['session']['new']:
         on_session_started({'requestId': event['request']['requestId']},
                            event['session'])
+
+    if not database.get_user_email(event['session']['user']['userId']):
+        return build_link_account_card()
 
     if event['request']['type'] == "LaunchRequest":
         return on_launch(event['request'], event['session'])

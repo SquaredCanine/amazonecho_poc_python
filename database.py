@@ -52,4 +52,4 @@ def get_user_email(uid):
     for element in cursor:
         return element[0]
     cnx.close()
-    return 'wrong@wrong.wrong'
+    return False
