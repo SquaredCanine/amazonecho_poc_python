@@ -1,5 +1,5 @@
 import requests
-import _json
+
 base_url = 'https://www.nsinternational.nl/api/v1.1/'
 price_and_time_request_url = 'connections/'
 stationname_request_url = 'stations/'
