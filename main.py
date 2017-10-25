@@ -31,7 +31,6 @@ def add_user(access_token, UID):
     database.add_user(UID, response['name'], response['name'])
 
 
-
 # --------------- Helpers that build all of the responses ----------------------
 
 
