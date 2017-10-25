@@ -53,3 +53,12 @@ def get_user_email(uid):
         return element[0]
     cnx.close()
     return False
+
+
+def add_user(uid, name, email):
+    initialize()
+    global cursor, cnx
+    query = 'INSERT INTO Users (UID, name, email) VALUES (%s, %s, %s)'
+    cursor.execute(query, (uid, name, email))
+    cnx.commit()
+    cnx.close()
