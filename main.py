@@ -12,6 +12,7 @@ import time
 import database
 import nsi
 import mailclient
+import amazon
 
 current_date = time.strftime('%Y%m%d')
 current_time = time.strftime('%H%M')
@@ -24,8 +25,11 @@ unique_ns_id = ''
 
 # --------------- Helper Functions ---------------------------------------------
 
-def add_user():
-    print('adding user')
+
+def add_user(access_token, UID):
+    response = amazon.get_user_data(access_token)
+
+
 
 # --------------- Helpers that build all of the responses ----------------------
 
@@ -325,11 +329,11 @@ def lambda_handler(event, context):
     if event['session']['new']:
         on_session_started({'requestId': event['request']['requestId']},
                            event['session'])
-        
+
     if not event['session']['user']['accesToken']:
         return build_simple_response(link_account_card())
     elif not database.get_user_email(event['session']['user']['userId']):
-        add_user()
+        add_user(event['session']['user']['accesToken'], event['session']['user']['userId'])
 
     if event['request']['type'] == "LaunchRequest":
         return on_launch(event['request'], event['session'])
