@@ -330,10 +330,10 @@ def lambda_handler(event, context):
         on_session_started({'requestId': event['request']['requestId']},
                            event['session'])
 
-    if not event['session']['user']['accesToken']:
+    if not event['session']['user']['accessToken']:
         return build_simple_response(link_account_card())
     elif not database.get_user_email(event['session']['user']['userId']):
-        add_user(event['session']['user']['accesToken'], event['session']['user']['userId'])
+        add_user(event['session']['user']['accessToken'], event['session']['user']['userId'])
 
     if event['request']['type'] == "LaunchRequest":
         return on_launch(event['request'], event['session'])
