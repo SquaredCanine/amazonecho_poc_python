@@ -22,6 +22,10 @@ possible_connections = []
 global unique_ns_id
 unique_ns_id = ''
 
+# --------------- Helper Functions ---------------------------------------------
+
+def add_user():
+    print('adding user')
 
 # --------------- Helpers that build all of the responses ----------------------
 
@@ -85,11 +89,8 @@ def build_dialog(intent):
     }
 
 
-def build_link_account_card(session_attributes):
+def link_account_card():
     return {
-        'version': '1.0',
-        'sessionAttributes': session_attributes,
-        'response': {
             'outputSpeech': {
                 'type': 'PlainText',
                 'text': 'Go to your alexa app to link this skill'
@@ -99,7 +100,6 @@ def build_link_account_card(session_attributes):
             },
             'shouldEndSession': True
         }
-    }
 
 
 # --------------- Functions that control the skill's behavior ------------------
@@ -325,9 +325,11 @@ def lambda_handler(event, context):
     if event['session']['new']:
         on_session_started({'requestId': event['request']['requestId']},
                            event['session'])
-
-    if not database.get_user_email(event['session']['user']['userId']):
-        return build_link_account_card()
+        
+    if not event['session']['user']['accesToken']:
+        return build_simple_response(link_account_card())
+    elif not database.get_user_email(event['session']['user']['userId']):
+        add_user()
 
     if event['request']['type'] == "LaunchRequest":
         return on_launch(event['request'], event['session'])
