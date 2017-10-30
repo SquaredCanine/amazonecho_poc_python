@@ -13,9 +13,11 @@ import database
 import nsi
 import mailclient
 import amazon
+from datetime import datetime, timedelta
 
-current_date = time.strftime('%Y%m%d')
-current_time = time.strftime('%H%M')
+calc_time = datetime.now() + timedelta(hours=2)
+current_date = calc_time.strftime('%Y%m%d')
+current_time = calc_time.strftime('%H%M')
 global journeyhasbeenselected
 journeyhasbeenselected = False
 global possible_connections
