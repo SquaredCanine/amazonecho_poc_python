@@ -180,7 +180,8 @@ def get_traveler_response(intent, session):
                       element['destination']['arrival']['planned'].split()[1] + '. '
         counter += 1
     if counter == 0:
-        outputtext += "There are no options available, try choosing a different date"
+        outputtext = "There are no options available, try choosing a different date"
+        return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
     else:
         outputtext += "Which option do you choose?"
         global journeyhasbeenselected
