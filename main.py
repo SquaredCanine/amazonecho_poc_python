@@ -30,8 +30,7 @@ unique_ns_id = ''
 
 def add_user(access_token, UID):
     response = amazon.get_user_data(access_token)
-    database.add_user(UID, response['name'], response['name'])
-    #FIX THIS ^
+    database.add_user(UID, response['name'], response['email'])
 
 # --------------- Helpers that build all of the responses ----------------------
 
