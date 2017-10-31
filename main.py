@@ -157,9 +157,7 @@ def get_traveler_response(intent, session):
         chosentime = intent['slots']['time']['value']
         outputtext += 'At ' + chosentime + '. '
 
-    origincode = nsi.get_stationname_response(origin)['data']['stations'][0]['code']
-    destinationcode = nsi.get_stationname_response(destination)['data']['stations'][0]['code']
-    timetable = nsi.get_price_and_time_response(origincode, destinationcode, current_date, current_time, 2, 'departure')
+    timetable = nsi.get_price_and_time_response(origin, destination, current_date, current_time, 2, 'departure')
     all_connections = timetable['data']['connections']
     global unique_ns_id
     unique_ns_id = timetable['data']['uid']

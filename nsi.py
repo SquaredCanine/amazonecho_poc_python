@@ -7,23 +7,31 @@ provisional_booking_request_url = 'bookings/provision/'
 alternative_booking_request_url = 'bookings/alternative/'
 
 
-def get_price_and_time_response(origincode, destinationcode, date, time, amount_of_passengers, juncture):
+def get_price_and_time_response(origin, destination, date, time, amount_of_passengers, juncture):
     passengers = 'passengers='
     timetype = 'timetype=' + juncture + ''
 
+    origincode = get_station_name_response(origin)
+    destinationcode = get_station_name_response(destination)
     passengers += 'A,' * amount_of_passengers
     full_url = '{0}{1}{2}/{3}/{4}/{5}/outbound?{6}&{7}'.format(base_url, price_and_time_request_url, origincode,
                                                                destinationcode, date, time, passengers, timetype)
     print(full_url)
     response = requests.get(full_url)
-    return response.json()
+    if response.json()['data']['connections']:
+        return response.json()
+    else:
+        return False
 
 
-def get_stationname_response(name):
+def get_station_name_response(name):
     name = '?name=' + name
 
     response = requests.get(base_url + stationname_request_url + name)
-    return response.json()
+    if response.json()['data']['stations'][0]['code']:
+        return response.json()['data']['stations'][0]['code']
+    else:
+        return False
 
 
 def provisional_booking_request(uid, selectedjourney, selectedclass, amount_of_passengers):
@@ -63,3 +71,4 @@ def provisional_booking_request(uid, selectedjourney, selectedclass, amount_of_p
         response = requests.post(alternate_url, body)
         print('alternative option: ' + response)
         return response.json()
+
