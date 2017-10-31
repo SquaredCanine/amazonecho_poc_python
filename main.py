@@ -145,19 +145,22 @@ def get_traveler_response(intent, session):
     print(session)
     destination = intent['slots']['toCity']['value']
     origin = intent['slots']['fromCity']['value']
-    outputtext = 'You want to go to ' + destination + ' and you are travelling from ' + origin + ". "
+    output = 'You have chosen ' + origin + ' as your place of departure. And you want to go to ' + destination + '. '
     if 'value' in intent['slots']['date']:
         date = intent['slots']['date']['value']
-        outputtext += 'On ' + date + ". "
+        output += 'On ' + date + ". "
     if 'value' in intent['slots']['juncture']:
         juncture = intent['slots']['juncture']['value']
         arrival = True if juncture == 'arrival' else False
-        outputtext += 'And you want to ' + juncture + ' '
     if 'value' in intent['slots']['time']:
         chosentime = intent['slots']['time']['value']
-        outputtext += 'At ' + chosentime + '. '
 
     timetable = nsi.get_price_and_time_response(origin, destination, current_date, current_time, 2, 'departure')
+
+    if not timetable:
+        alternative = 'Your selected origin or destination is wrong, please try again.'
+        return build_simple_response(build_speechlet_response('card', alternative, 'Are you there?', 'true'))
+
     all_connections = timetable['data']['connections']
     global unique_ns_id
     unique_ns_id = timetable['data']['uid']
@@ -168,22 +171,27 @@ def get_traveler_response(intent, session):
             possible_connections.append(element)
             if len(possible_connections) >= 3:
                 break
-    print(str(len(possible_connections)))
-    outputtext += 'There are ' + str(len(possible_connections)) + ' options available. '
+
+    if not possible_connections:
+        alternative = 'There are no trains available, try a different date'
+        return build_simple_response(build_speechlet_response('card', alternative, 'Are you there?', 'true'))
+
+    output += 'There are ' + str(len(possible_connections)) + ' options available. '
     ordinal_number_list = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
     counter = 0
     for element in possible_connections:
-        outputtext += 'The ' + ordinal_number_list[counter] + ' option is arrival at ' + \
+        output += 'The ' + ordinal_number_list[counter] + ' option is arrival at ' + \
                       element['destination']['arrival']['planned'].split()[1] + '. '
         counter += 1
     if counter == 0:
-        outputtext = "There are no options available, try choosing a different date"
-        return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
+        output = "There are no options available, try choosing a different date"
+        return build_simple_response(build_speechlet_response('card', output, 'Are you there?', 'true'))
     else:
-        outputtext += "Which option do you choose?"
+        output += "Which option do you choose?"
         global journeyhasbeenselected
         journeyhasbeenselected = True
-    return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'false'))
+    reprompt = 'If you want to cancel the order just say exit.'
+    return build_simple_response(build_speechlet_response('card', output, reprompt, 'false'))
 
 
 def get_choose_intent_response(intent, session):
