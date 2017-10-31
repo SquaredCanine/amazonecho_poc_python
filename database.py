@@ -37,7 +37,10 @@ def add_journey(selectedjourney, UID, selectedclass):
     departuredate = selectedjourney['origin']['departure']['planned'].split()[0].replace('-', '')
     orderprice = selectedjourney['offers'][selectedclass]['salesPrice']['amount']
     identifier = get_journey_identifier(UID)
-    identifier += 1
+    if identifier:
+        identifier += 1
+    else:
+        identifier = 1
     query = "INSERT INTO Journey (UID, identifier, originCode, destinationCode, departuretime, departuredate,orderprice) VALUES (%s, %s, %s, %s, %s, %s, %s)"
     cursor.execute(query, (UID, identifier, origincode, destinationcode, departuretime, departuredate, orderprice))
     cnx.commit()
