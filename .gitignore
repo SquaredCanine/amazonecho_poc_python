@@ -16,3 +16,4 @@ target/
 
 #Pom backups
 pom.xml.versionsBackup
+test_lambda_handler.py
