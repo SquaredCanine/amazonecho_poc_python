@@ -140,9 +140,6 @@ def handle_session_end_request():
 
 
 def get_traveler_response(intent, session):
-    print('TravelerResponse')
-    print(intent)
-    print(session)
     destination = intent['slots']['toCity']['value']
     origin = intent['slots']['fromCity']['value']
     output = 'You have chosen ' + origin + ' as your place of departure. And you want to go to ' + destination + '. '
@@ -195,9 +192,6 @@ def get_traveler_response(intent, session):
 
 
 def get_choose_intent_response(intent, session):
-    print("ChooseIntent")
-    print(intent)
-    print(session)
     global possible_connections
     option = int(intent['slots']['option']['value'])
     outputtext = 'You have chosen option ' + str(option) + '. '
@@ -232,21 +226,16 @@ def get_choose_intent_response(intent, session):
 
 
 def get_cheapest_option(intent, session):
-    print('CheapestOption')
-    print(intent)
-    print(session)
+    print('hello')
+
 
 
 def get_location_intent_response(intent, session):
-    print('location intent')
-    print(intent)
-    print(session)
+    print('hello')
 
 
 def get_composition_intent_response(intent, session):
-    print('composition intent')
-    print(intent)
-    print(session)
+    print('hello')
 
 
 # --------------- Events ------------------
@@ -279,7 +268,9 @@ def on_intent(intent_request, session):
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']
     dialogstate = intent_request['dialogState']
-
+    print(intent_name)
+    print(intent)
+    print(session)
     # Dispatch to your skill's intent handlers
     if intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
