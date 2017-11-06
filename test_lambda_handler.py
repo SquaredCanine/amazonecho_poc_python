@@ -1,5 +1,6 @@
 from unittest import TestCase
 from main import lambda_handler
+import nsi
 
 
 class TestLambda_handler(TestCase):
@@ -8,6 +9,12 @@ class TestLambda_handler(TestCase):
         self.assertRaises(Exception, lambda_handler(data, {}))
         data = {'version': '1.0', 'session': {'new': False, 'sessionId': 'amzn1.echo-api.session.d52910fc-9ed4-4af4-9ba2-d9491193d44a', 'application': {'applicationId': 'amzn1.ask.skill.df22d8e8-7b48-4d1a-b370-d0601cddcaee'}, 'user': {'userId': 'amzn1.ask.account.AHZYMQKCXU7YUPVE7OCORADTJ3X6RZJTS6XEE32FXIYI4E4AGOLXSSL75GC2GDWFTAR7MZ2VBV3KDPAOAMC4RBT3EDU2HOUKUMPAW77LPVTUH2TFU47S22YB5QOIOI5SDVWK4RG2KOWDQNAE32I44FAQEWI7DQJNYNO7KCM44G6BNHRU5UDLP7HYAVPPWKYTU6MXF7XWBMGL75I', 'accessToken': 'Atza|IwEBIOwSaDj7a_dX8MxogF4qJ5ptCzzNmmFwdLcgG_kZtlZej6cRpaC6ERfTEC__Usu1Nz7UyIS0psQTu_iEpTQ6A6hT6MMitQZ6RFR9T3Tb0-ZlVG45hAVHC-zXMHP6v_AYcQUHYVs0Nwkam75WImWmnTAMvaYDNCZQGP5IPCI4k0Mae4SDZFF6JyDfneqRnJ_An-q5URM2nQ3hp8OvNOC3rMONXXtjgnv1el4z5OzWKeywqv0nCX0_0ADlzHcyYU7-Ah95N1RldWBgDswN0t0OYky40G2_DsH3Lp7sFDHhvyGLxbIfJiJh1TOqVl9w60D5-EpiDzIbOUVoIreYpjPc-IpfiUs9KcXCMOWlYZhxRVX5DLHg501cBfwUrK47rFtI56_UeldsC4zF3BBBREfT5B4F2mTBX22aiw7Y9Y6kzOehAVk9FlYKsZaAGhnCQOPiVkyqmtFsh9EwD3ThwcLBLsj-BVDEidHkCsA49GJjgTW0P8zo4nKYXSR-kZE1D3IH3O69yBJW9AoUmgfnN0pdwjO6'}}, 'context': {'AudioPlayer': {'playerActivity': 'FINISHED'}, 'System': {'application': {'applicationId': 'amzn1.ask.skill.df22d8e8-7b48-4d1a-b370-d0601cddcaee'}, 'user': {'userId': 'amzn1.ask.account.AHZYMQKCXU7YUPVE7OCORADTJ3X6RZJTS6XEE32FXIYI4E4AGOLXSSL75GC2GDWFTAR7MZ2VBV3KDPAOAMC4RBT3EDU2HOUKUMPAW77LPVTUH2TFU47S22YB5QOIOI5SDVWK4RG2KOWDQNAE32I44FAQEWI7DQJNYNO7KCM44G6BNHRU5UDLP7HYAVPPWKYTU6MXF7XWBMGL75I', 'accessToken': 'Atza|IwEBIOwSaDj7a_dX8MxogF4qJ5ptCzzNmmFwdLcgG_kZtlZej6cRpaC6ERfTEC__Usu1Nz7UyIS0psQTu_iEpTQ6A6hT6MMitQZ6RFR9T3Tb0-ZlVG45hAVHC-zXMHP6v_AYcQUHYVs0Nwkam75WImWmnTAMvaYDNCZQGP5IPCI4k0Mae4SDZFF6JyDfneqRnJ_An-q5URM2nQ3hp8OvNOC3rMONXXtjgnv1el4z5OzWKeywqv0nCX0_0ADlzHcyYU7-Ah95N1RldWBgDswN0t0OYky40G2_DsH3Lp7sFDHhvyGLxbIfJiJh1TOqVl9w60D5-EpiDzIbOUVoIreYpjPc-IpfiUs9KcXCMOWlYZhxRVX5DLHg501cBfwUrK47rFtI56_UeldsC4zF3BBBREfT5B4F2mTBX22aiw7Y9Y6kzOehAVk9FlYKsZaAGhnCQOPiVkyqmtFsh9EwD3ThwcLBLsj-BVDEidHkCsA49GJjgTW0P8zo4nKYXSR-kZE1D3IH3O69yBJW9AoUmgfnN0pdwjO6'}, 'device': {'deviceId': 'amzn1.ask.device.AH6CGXR5CGVLD3LHFDWVNYFMRC3R76WXPK3L7VF5XHSO2VXQ7JX2SJIPLPOC5HXVKR3RBCA7ADQ2ZH7HSIMOMWBX3ZCKCKNTGXZX656PS6DJ672QPYA2I6M3K3S3YGE5T7DLDM5UV6547HAFVGL7PKLODAWA', 'supportedInterfaces': {'AudioPlayer': {}}}, 'apiEndpoint': 'https://api.eu.amazonalexa.com'}}, 'request': {'type': 'IntentRequest', 'requestId': 'amzn1.echo-api.request.4f8bd53d-6f5d-43fa-ac80-32ec2b78426f', 'timestamp': '2017-10-31T14:17:28Z', 'locale': 'en-US', 'intent': {'name': 'ChooseIntent', 'confirmationStatus': 'NONE', 'slots': {'option': {'name': 'option', 'value': '1', 'confirmationStatus': 'NONE'}}}, 'dialogState': 'COMPLETED'}}
         self.assertRaises(Exception, lambda_handler(data, {}))
+
+    def test_station_name_response(self):
+        self.assertRaises(Exception, nsi.get_station_name_response('Amsterdam'))
+
+    def test_cheapest_date_response(self):
+        self.assertRaises(Exception, nsi.get_calendar_date_response('amsterdam', 'paris'))
 
     def test_choose_intent(self):
         pass

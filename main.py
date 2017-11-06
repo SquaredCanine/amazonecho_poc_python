@@ -240,9 +240,9 @@ def get_cheapest_option_from_server(intent):
     origin = intent['slots']['fromCity']['value']
 
 
-
 def book_cheapest_option():
     print('hello')
+
 
 def get_location_intent_response(intent, session):
     print('hello')
