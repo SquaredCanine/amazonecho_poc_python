@@ -246,6 +246,7 @@ def get_cheapest_option_from_server(intent):
         response = nsi.get_calendar_price_response(origin, destination)
         for element in response['data']['prices']:
             if float(element['amount']) < cheapest_price:
+                cheapest_price = float(element['amount'])
                 outputtext = 'The cheapest journey is on ' + element['date']
     else:
         outputtext = 'There are no prices available for the selected origin and destination.'
