@@ -245,6 +245,7 @@ def get_cheapest_option_from_server(intent):
     response = nsi.get_calendar_date_response(origin, destination)
     cheapest_price = 2000.00
     outputtext = ''
+    print('!!!THIS IS THE RESPONSE: ' + str(response['data']))
     if response['data']['pricesAvailable']:
         response = nsi.get_calendar_price_response(origin, destination)
         for element in response['data']['prices']:

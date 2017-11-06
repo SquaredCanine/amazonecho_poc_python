@@ -31,7 +31,11 @@ def get_station_name_response(name):
 
     response = requests.get(base_url + stationname_request_url + name)
     if response.json()['data']['stations'][0]['code']:
-        return response.json()['data']['stations'][0]['code']
+        stationcode = response.json()['data']['stations'][0]['code']
+        for element in response.json()['data']['stations']:
+            if element['type'] == 'top-destination':
+                stationcode= element['code']
+        return stationcode
     else:
         return False
 
