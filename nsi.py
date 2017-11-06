@@ -34,7 +34,7 @@ def get_station_name_response(name):
         stationcode = response.json()['data']['stations'][0]['code']
         for element in response.json()['data']['stations']:
             if element['type'] == 'top-destination':
-                stationcode= element['code']
+                stationcode = element['code']
         return stationcode
     else:
         return False
@@ -79,7 +79,7 @@ def provisional_booking_request(uid, selectedjourney, selectedclass, amount_of_p
         return response.json()
 
 
-def get_calendar_date_response(origin,destination):
+def get_calendar_date_response(origin, destination):
     origincode = get_station_name_response(origin)
     destinationcode = get_station_name_response(destination)
 
