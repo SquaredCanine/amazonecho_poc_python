@@ -72,3 +72,13 @@ def provisional_booking_request(uid, selectedjourney, selectedclass, amount_of_p
         print('alternative option: ' + response)
         return response.json()
 
+
+class CheapestRequest:
+
+    cheapest_journey_boolean = False
+    origin = ''
+    destination = ''
+    date = ''
+    time = ''
+    amount_of_passengers = ''
+    juncture = ''

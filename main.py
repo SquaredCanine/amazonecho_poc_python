@@ -15,7 +15,7 @@ import mailclient
 import amazon
 from datetime import datetime, timedelta
 
-calc_time = datetime.now() + timedelta(hours=2)
+calc_time = datetime.now() + timedelta(hours=1)
 current_date = calc_time.strftime('%Y%m%d')
 current_time = calc_time.strftime('%H%M')
 global journeyhasbeenselected
@@ -24,6 +24,8 @@ global possible_connections
 possible_connections = []
 global unique_ns_id
 unique_ns_id = ''
+global cheapest_journey
+cheapest_journey = nsi.CheapestRequest
 
 # --------------- Helper Functions ---------------------------------------------
 
@@ -226,8 +228,18 @@ def get_choose_intent_response(intent, session):
 
 
 def get_cheapest_option(intent, session):
-    print('hello')
+    global cheapest_journey
+    if cheapest_journey.cheapest_journey_boolean:
+        book_cheapest_option()
+    else:
+        get_cheapest_option_from_server(intent)
 
+
+def get_cheapest_option_from_server(intent)
+    
+
+
+def book_cheapest_option():
 
 
 def get_location_intent_response(intent, session):
