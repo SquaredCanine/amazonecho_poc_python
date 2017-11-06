@@ -230,9 +230,9 @@ def get_choose_intent_response(intent, session):
 def get_cheapest_option(intent, session):
     global cheapest_journey
     if cheapest_journey.cheapest_journey_boolean:
-        book_cheapest_option()
+        return book_cheapest_option()
     else:
-        get_cheapest_option_from_server(intent)
+        return get_cheapest_option_from_server(intent)
 
 
 def get_cheapest_option_from_server(intent):
