@@ -235,8 +235,10 @@ def get_cheapest_option(intent, session):
         get_cheapest_option_from_server(intent)
 
 
-def get_cheapest_option_from_server(intent)
-    
+def get_cheapest_option_from_server(intent):
+    destination = intent['slots']['toCity']['value']
+    origin = intent['slots']['fromCity']['value']
+
 
 
 def book_cheapest_option():

@@ -7,6 +7,7 @@ provisional_booking_request_url = 'bookings/provision/'
 alternative_booking_request_url = 'bookings/alternative/'
 
 
+
 def get_price_and_time_response(origin, destination, date, time, amount_of_passengers, juncture):
     passengers = 'passengers='
     timetype = 'timetype=' + juncture + ''
@@ -71,6 +72,13 @@ def provisional_booking_request(uid, selectedjourney, selectedclass, amount_of_p
         response = requests.post(alternate_url, body)
         print('alternative option: ' + response)
         return response.json()
+
+
+def get_calendar_date_response(origin,destination):
+    
+
+
+def get_calendar_price_response(origin, destination):
 
 
 class CheapestRequest:
