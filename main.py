@@ -231,7 +231,7 @@ def get_cheapest_option(intent, session):
     global cheapest_journey
     print('THIS IS THE CONTENT: ' + cheapest_journey.date)
     if cheapest_journey.cheapest_journey_boolean:
-        return book_cheapest_option()
+        return book_cheapest_option(session)
     else:
         return get_cheapest_option_from_server(intent)
 
@@ -240,6 +240,8 @@ def get_cheapest_option_from_server(intent):
     destination = intent['slots']['toCity']['value']
     origin = intent['slots']['fromCity']['value']
     global cheapest_journey
+    cheapest_journey.destination = destination
+    cheapest_journey.origin = origin
     response = nsi.get_calendar_date_response(origin, destination)
     cheapest_price = 2000.00
     outputtext = ''
@@ -249,11 +251,10 @@ def get_cheapest_option_from_server(intent):
             if float(element['amount']) < cheapest_price:
                 cheapest_price = float(element['amount'])
                 outputtext = 'The cheapest journey is on ' + element['date']
-                cheapest_journey.date = element['date']
+                cheapest_journey.date = element['date'].replace('-', '')
                 for prices in element['arrival']['periods']:
                     if prices['amount'] == element['amount']:
-                        cheapest_journey.time = prices['time']
-        print('Summary ' + cheapest_journey.time + '----' + cheapest_journey.date)
+                        cheapest_journey.time = prices['time'].replace(':', '')
         cheapest_journey.cheapest_journey_boolean = True
     else:
         outputtext = 'There are no prices available for the selected origin and destination.'
@@ -261,10 +262,23 @@ def get_cheapest_option_from_server(intent):
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'false'))
 
 
-def book_cheapest_option():
+def book_cheapest_option(session):
     global cheapest_journey
     cheapest_journey.cheapest_journey_boolean = False
-    outputtext = 'IT WORKS'
+    timetable = nsi.get_price_and_time_response(cheapest_journey.origin, cheapest_journey.destination,
+                                                cheapest_journey.date, cheapest_journey.time, 2, 'departure')
+    journey = timetable['data']['connections'][0]
+    response = nsi.provisional_booking_request(unique_ns_id, journey, 0, 2)
+    gotourl = 'https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature='\
+              + response['data']['signature']
+    print(gotourl)
+    database.add_journey(journey, session['user']['userId'], 0)
+    user_email = database.get_user_email(session['user']['userId'])
+    mailclient.set_destination(user_email)
+    mailclient.set_body(journey, gotourl)
+    mailclient.send_mail()
+
+    outputtext = 'Please go to your email to finish the booking'
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
 
