@@ -238,7 +238,7 @@ def get_cheapest_option(intent, session):
 def get_cheapest_option_from_server(intent):
     destination = intent['slots']['toCity']['value']
     origin = intent['slots']['fromCity']['value']
-
+    global cheapest_journey
     response = nsi.get_calendar_date_response(origin, destination)
     cheapest_price = 2000.00
     outputtext = ''
@@ -246,16 +246,22 @@ def get_cheapest_option_from_server(intent):
         response = nsi.get_calendar_price_response(origin, destination)
         for element in response['data']['prices']:
             if float(element['amount']) < cheapest_price:
-                cheapest_price = float(element['amount'])
                 outputtext = 'The cheapest journey is on ' + element['date']
+                cheapest_journey.date = element['date']
+                for prices in element['arrival']['periods']:
+                    if prices['amount'] == element['amount']:
+                        cheapest_journey.time = prices['time']
+        print('Summary ' + cheapest_journey.time + '----' + cheapest_journey.date)
+        cheapest_journey.cheapest_journey_boolean = True
     else:
         outputtext = 'There are no prices available for the selected origin and destination.'
 
-    return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
+    return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'false'))
 
 
 def book_cheapest_option():
-    print('hello')
+    outputtext = 'IT WORKS'
+    return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
 
 def get_location_intent_response(intent, session):
