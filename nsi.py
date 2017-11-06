@@ -95,7 +95,7 @@ def get_calendar_price_response(origin, destination):
 
 class CheapestRequest:
 
-    cheapest_journey_boolean = False
+    cheapest_journey_boolean = ''
     origin = ''
     destination = ''
     date = ''

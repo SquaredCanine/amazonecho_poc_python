@@ -229,6 +229,7 @@ def get_choose_intent_response(intent, session):
 
 def get_cheapest_option(intent, session):
     global cheapest_journey
+    print('THIS IS THE CONTENT: ' + cheapest_journey.date)
     if cheapest_journey.cheapest_journey_boolean:
         return book_cheapest_option()
     else:
@@ -246,6 +247,7 @@ def get_cheapest_option_from_server(intent):
         response = nsi.get_calendar_price_response(origin, destination)
         for element in response['data']['prices']:
             if float(element['amount']) < cheapest_price:
+                cheapest_price = float(element['amount'])
                 outputtext = 'The cheapest journey is on ' + element['date']
                 cheapest_journey.date = element['date']
                 for prices in element['arrival']['periods']:
@@ -260,6 +262,8 @@ def get_cheapest_option_from_server(intent):
 
 
 def book_cheapest_option():
+    global cheapest_journey
+    cheapest_journey.cheapest_journey_boolean = False
     outputtext = 'IT WORKS'
     return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
 
@@ -293,6 +297,7 @@ def on_launch(launch_request, session):
 
 
 def on_intent(intent_request, session):
+    global cheapest_journey
     """ Called when the user specifies an intent for this skill """
 
     print("on_intent requestId=" + intent_request['requestId'] +
@@ -310,6 +315,9 @@ def on_intent(intent_request, session):
         return get_welcome_response()
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
         return handle_session_end_request()
+
+    if intent_name == 'Cheapest' and cheapest_journey.cheapest_journey_boolean:
+        return get_cheapest_option(intent, session)
 
     if dialogstate == 'STARTED' or dialogstate == 'IN_PROGRESS':
         return build_dialog(intent)
