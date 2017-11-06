@@ -9,7 +9,6 @@ calendar_date_request_url = 'calendardates/'
 calendar_price_request_url = 'calendarprices/'
 
 
-
 def get_price_and_time_response(origin, destination, date, time, amount_of_passengers, juncture):
     passengers = 'passengers='
     timetype = 'timetype=' + juncture + ''
@@ -86,7 +85,12 @@ def get_calendar_date_response(origin,destination):
 
 
 def get_calendar_price_response(origin, destination):
-    print('hello')
+    origincode = get_station_name_response(origin)
+    destinationcode = get_station_name_response(destination)
+
+    full_url = '{0}{1}{2}/{3}/outbound?lang=nl'.format(base_url, calendar_price_request_url, origincode, destinationcode)
+    response = requests.get(full_url)
+    return response.json()
 
 
 class CheapestRequest:
