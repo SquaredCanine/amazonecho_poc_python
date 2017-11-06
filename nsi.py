@@ -77,10 +77,16 @@ def provisional_booking_request(uid, selectedjourney, selectedclass, amount_of_p
 
 
 def get_calendar_date_response(origin,destination):
+    origincode = get_station_name_response(origin)
+    destinationcode = get_station_name_response(destination)
 
+    full_url = '{0}{1}{2}/{3}/outbound?lang=nl'.format(base_url, calendar_date_request_url, origincode, destinationcode)
+    response = requests.get(full_url)
+    return response.json()
 
 
 def get_calendar_price_response(origin, destination):
+    print('hello')
 
 
 class CheapestRequest:
