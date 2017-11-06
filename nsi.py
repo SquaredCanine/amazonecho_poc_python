@@ -5,6 +5,8 @@ price_and_time_request_url = 'connections/'
 stationname_request_url = 'stations/'
 provisional_booking_request_url = 'bookings/provision/'
 alternative_booking_request_url = 'bookings/alternative/'
+calendar_date_request_url = 'calendardates/'
+calendar_price_request_url = 'calendarprices/'
 
 
 
@@ -75,7 +77,7 @@ def provisional_booking_request(uid, selectedjourney, selectedclass, amount_of_p
 
 
 def get_calendar_date_response(origin,destination):
-    
+
 
 
 def get_calendar_price_response(origin, destination):
