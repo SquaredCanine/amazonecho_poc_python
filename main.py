@@ -243,7 +243,7 @@ def get_cheapest_option_from_server(intent):
     cheapest_journey.destination = destination
     cheapest_journey.origin = origin
     response = nsi.get_calendar_date_response(origin, destination)
-    if not response:
+    if response['status'] == 'failure':
         outputtext = 'You probably misspoke, or i am retarded'
         return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
     cheapest_price = 2000.00
