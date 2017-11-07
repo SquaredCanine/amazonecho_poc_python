@@ -18,7 +18,6 @@ def get_price_and_time_response(origin, destination, date, time, amount_of_passe
     passengers += 'A,' * amount_of_passengers
     full_url = '{0}{1}{2}/{3}/{4}/{5}/outbound?{6}&{7}'.format(base_url, price_and_time_request_url, origincode,
                                                                destinationcode, date, time, passengers, timetype)
-    print(full_url)
     response = requests.get(full_url)
     if response.json()['data']['connections']:
         return response.json()
@@ -70,14 +69,10 @@ def provisional_booking_request(uid, selectedjourney, selectedclass, amount_of_p
     },
         "passengers": passengers
     })
-    print('full url: ' + full_url)
-    print('alternate url: ' + alternate_url)
-    print('body: ' + str(body))
     if response:
         return response.json()
     else:
         response = requests.post(alternate_url, body)
-        print('alternative option: ' + response)
         return response.json()
 
 

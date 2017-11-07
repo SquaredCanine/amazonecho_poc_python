@@ -48,9 +48,7 @@ def send_mail():
         msg['Subject'] = subject
         msg['From'] = sender
         msg['To'] = destination[0]
-        print(msg)
         conn = SMTP(SMTPserver)
-        conn.set_debuglevel(True)
         conn.login(username, password)
         try:
             conn.sendmail(sender, destination, msg.as_string())
