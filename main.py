@@ -256,7 +256,7 @@ def get_cheapest_option_from_server(intent):
                 cheapest_price = float(element['amount'])
                 outputtext = 'The cheapest journey is on ' + element['date']
                 cheapest_journey.date = element['date'].replace('-', '')
-                for prices in element['arrival']['periods']:
+                for prices in element['departure']['periods']:
                     if prices['amount'] == element['amount']:
                         cheapest_journey.time = prices['time'].replace(':', '')
         cheapest_journey.cheapest_journey_boolean = True
@@ -267,11 +267,13 @@ def get_cheapest_option_from_server(intent):
 
 
 def book_cheapest_option(session):
-    global cheapest_journey
+    global cheapest_journey, unique_ns_id
     cheapest_journey.cheapest_journey_boolean = False
     timetable = nsi.get_price_and_time_response(cheapest_journey.origin, cheapest_journey.destination,
                                                 cheapest_journey.date, cheapest_journey.time, 2, 'departure')
     journey = timetable['data']['connections'][0]
+    unique_ns_id = timetable['data']['uid']
+    print('JOURNEY IS: ' + str(journey))
     response = nsi.provisional_booking_request(unique_ns_id, journey, 0, 2)
     gotourl = 'https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature='\
               + response['data']['signature']

@@ -73,7 +73,6 @@ def provisional_booking_request(uid, selectedjourney, selectedclass, amount_of_p
     print('full url: ' + full_url)
     print('alternate url: ' + alternate_url)
     print('body: ' + str(body))
-    print(response.json())
     if response:
         return response.json()
     else:
