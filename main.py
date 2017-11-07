@@ -42,7 +42,6 @@ def delegate_directive(intent):
         'type': 'Dialog.Delegate',
         'updatedIntent': intent
     }
-    print(delegate)
     return delegate
 
 
@@ -205,11 +204,9 @@ def get_choose_intent_response(intent, session):
     if len(possible_connections) - 1 > option:
         option = 0
     selected_journey = possible_connections[option]
-    print(selected_journey)
     response = nsi.provisional_booking_request(unique_ns_id, selected_journey, 0, 2)
     gotourl = 'https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature=' \
               + response['data']['signature']
-    print(gotourl)
     database.add_journey(selected_journey, session['user']['userId'], 0)
     user_email = database.get_user_email(session['user']['userId'])
     mailclient.set_destination(user_email)
@@ -229,7 +226,6 @@ def get_choose_intent_response(intent, session):
 
 def get_cheapest_option(intent, session):
     global cheapest_journey
-    print('THIS IS THE CONTENT: ' + cheapest_journey.date)
     if cheapest_journey.cheapest_journey_boolean:
         return book_cheapest_option(session)
     else:
@@ -248,7 +244,6 @@ def get_cheapest_option_from_server(intent):
         return build_simple_response(build_speechlet_response('card', outputtext, 'Are you there?', 'true'))
     cheapest_price = 2000.00
     outputtext = ''
-    print('!!!THIS IS THE RESPONSE: ' + str(response['data']))
     if response['data']['pricesAvailable']:
         response = nsi.get_calendar_price_response(origin, destination)
         for element in response['data']['prices']:
@@ -273,11 +268,9 @@ def book_cheapest_option(session):
                                                 cheapest_journey.date, cheapest_journey.time, 2, 'departure')
     journey = timetable['data']['connections'][0]
     unique_ns_id = timetable['data']['uid']
-    print('JOURNEY IS: ' + str(journey))
     response = nsi.provisional_booking_request(unique_ns_id, journey, 0, 2)
     gotourl = 'https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature='\
               + response['data']['signature']
-    print(gotourl)
     database.add_journey(journey, session['user']['userId'], 0)
     user_email = database.get_user_email(session['user']['userId'])
     mailclient.set_destination(user_email)
@@ -322,14 +315,10 @@ def on_intent(intent_request, session):
 
     print("on_intent requestId=" + intent_request['requestId'] +
           ", sessionId=" + session['sessionId'])
-    print(intent_request)
 
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']
     dialogstate = intent_request['dialogState']
-    print(intent_name)
-    print(intent)
-    print(session)
     # Dispatch to your skill's intent handlers
     if intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
