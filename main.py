@@ -297,7 +297,7 @@ def get_location_intent_response(intent, session):
         outputtext = 'Location adding failed'
         return build_simple_response(build_speechlet_response('card', outputtext, '', 'true'))
 
-    
+
 def get_composition_intent_response(intent, session):
     number_of_people = int(intent['slots']['numberOfPassengers']['value'])
     uid = session['user']['userId']
