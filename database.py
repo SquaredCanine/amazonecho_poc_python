@@ -23,9 +23,8 @@ def get_journey_identifier(uid):
     query = "SELECT max(identifier) FROM Journey WHERE UID = %s"
     cursor.execute(query, (uid,))
     for element in cursor:
-        print(element[0])
-    cnx.close
-    return element[0]
+        return element[0] + 1
+    return 1
 
 
 def add_journey(selectedjourney, UID, selectedclass):
@@ -37,10 +36,6 @@ def add_journey(selectedjourney, UID, selectedclass):
     departuredate = selectedjourney['origin']['departure']['planned'].split()[0].replace('-', '')
     orderprice = selectedjourney['offers'][selectedclass]['salesPrice']['amount']
     identifier = get_journey_identifier(UID)
-    if identifier:
-        identifier += 1
-    else:
-        identifier = 1
     query = "INSERT INTO Journey (UID, identifier, originCode, destinationCode, departuretime, departuredate,orderprice) VALUES (%s, %s, %s, %s, %s, %s, %s)"
     cursor.execute(query, (UID, identifier, origincode, destinationcode, departuretime, departuredate, orderprice))
     cnx.commit()
@@ -93,4 +88,4 @@ def get_composition(uid):
     cursor.execute(query, (uid, ))
     for element in cursor:
         return element[0]
-    return False
+    return 1
