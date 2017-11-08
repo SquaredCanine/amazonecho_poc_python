@@ -284,8 +284,9 @@ def book_cheapest_option(session):
 
 
 def get_location_intent_response(intent, session):
-    print('hello')
-
+    name_of_location = intent['slots']['locationidentifier']['value']
+    location = intent['slots']['cityname']['value']
+    
 
 def get_composition_intent_response(intent, session):
     number_of_people = int(intent['slots']['numberOfPassengers']['value'])
