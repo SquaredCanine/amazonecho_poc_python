@@ -89,3 +89,34 @@ def get_composition(uid):
     for element in cursor:
         return element[0]
     return 1
+
+
+def get_locations(uid):
+    global cnx, cursor
+    initialize()
+    query = 'SELECT identifier,city,stationcode FROM Location WHERE UID=%s'
+    cursor.execute(query, (uid, ))
+    results = []
+    for (identifier, city, stationcode) in cursor:
+        results.append((identifier, city, stationcode))
+    cnx.close()
+    return results
+
+
+def add_location(uid, name_of_location, location, station_code):
+    remove_location(uid, name_of_location)
+    global cnx, cursor
+    initialize()
+    query = 'INSERT INTO Location (UID, identifier, city, stationCode) VALUES (%s,%s,%s,%s)'
+    cursor.execute(query, (uid, name_of_location, location, station_code))
+    cnx.commit()
+    cnx.close()
+
+
+def remove_location(uid, name_of_location):
+    global cnx, cursor
+    initialize()
+    query = 'DELETE FROM Location WHERE UID=%s and identifier=%s'
+    cursor.execute(query, (uid, name_of_location))
+    cnx.commit()
+    cnx.close()
