@@ -17,11 +17,11 @@ def initialize():
     cursor = cnx.cursor()
 
 
-def get_journey_identifier(UID):
+def get_journey_identifier(uid):
     initialize()
     global cursor, cnx
     query = "SELECT max(identifier) FROM Journey WHERE UID = %s"
-    cursor.execute(query, (UID, ))
+    cursor.execute(query, (uid,))
     for element in cursor:
         print(element[0])
     cnx.close
@@ -63,5 +63,24 @@ def add_user(uid, name, email):
     global cursor, cnx
     query = 'INSERT INTO Users (UID, name, email) VALUES (%s, %s, %s)'
     cursor.execute(query, (uid, name, email))
+    cnx.commit()
+    cnx.close()
+
+
+def add_composition(uid, number_of_passengers):
+    remove_composition(uid)
+    global cnx, cursor
+    initialize()
+    query = "INSERT INTO Composition (UID, numberOfPassengers) VALUES (%s, %s)"
+    cursor.execute(query, (uid, number_of_passengers))
+    cnx.commit()
+    cnx.close()
+
+
+def remove_composition(uid):
+    global cnx, cursor
+    initialize()
+    query = "DELETE FROM Composition WHERE UID = %s"
+    cursor.execute(query, (uid, ))
     cnx.commit()
     cnx.close()
