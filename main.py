@@ -286,8 +286,18 @@ def book_cheapest_option(session):
 def get_location_intent_response(intent, session):
     name_of_location = intent['slots']['locationidentifier']['value']
     location = intent['slots']['cityname']['value']
-    
+    uid = session['user']['userId']
+    try:
+        stationcode = nsi.get_station_name_response(location)
+        database.add_location(uid, name_of_location, location, stationcode)
+        outputtext = 'Location added succesfully, where do you want to travel?'
+        reprompttext = 'If you want to quit you can say exit, or you can I want to travel to Amsterdam'
+        return build_simple_response(build_speechlet_response('card', outputtext, reprompttext, 'false'))
+    finally:
+        outputtext = 'Location adding failed'
+        return build_simple_response(build_speechlet_response('card', outputtext, '', 'true'))
 
+    
 def get_composition_intent_response(intent, session):
     number_of_people = int(intent['slots']['numberOfPassengers']['value'])
     uid = session['user']['userId']
