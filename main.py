@@ -286,7 +286,17 @@ def get_location_intent_response(intent, session):
 
 
 def get_composition_intent_response(intent, session):
-    print('hello')
+    number_of_people = int(intent['slots']['numberOfPassengers']['value'])
+    uid = session['user']['userId']
+
+    try:
+        database.add_composition(uid, number_of_people)
+        outputtext = 'Composition added succesfully'
+        repromttext = 'Where do you want to go?'
+        return build_simple_response(build_speechlet_response('card', outputtext, repromttext, 'false'))
+    finally:
+        outputtext = 'Composition adding failed'
+        return build_simple_response(build_speechlet_response('card', outputtext, '', 'true'))
 
 
 # --------------- Events ------------------
