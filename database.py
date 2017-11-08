@@ -84,3 +84,13 @@ def remove_composition(uid):
     cursor.execute(query, (uid, ))
     cnx.commit()
     cnx.close()
+
+
+def get_composition(uid):
+    global cnx, cursor
+    initialize()
+    query = 'SELECT numberOfPassengers FROM Composition WHERE UID= %s'
+    cursor.execute(query, (uid, ))
+    for element in cursor:
+        return element[0]
+    return False
