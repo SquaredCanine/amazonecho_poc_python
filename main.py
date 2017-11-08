@@ -152,8 +152,8 @@ def get_traveler_response(intent, session):
         arrival = True if juncture == 'arrival' else False
     if 'value' in intent['slots']['time']:
         chosentime = intent['slots']['time']['value']
-
-    timetable = nsi.get_price_and_time_response(origin, destination, current_date, current_time, 2, 'departure')
+    number_of_passengers = database.get_composition(session['user']['userId'])
+    timetable = nsi.get_price_and_time_response(origin, destination, current_date, current_time, number_of_passengers, 'departure')
 
     if not timetable:
         alternative = 'Your selected origin or destination is wrong, please try again.'
@@ -204,7 +204,8 @@ def get_choose_intent_response(intent, session):
     if len(possible_connections) - 1 > option:
         option = 0
     selected_journey = possible_connections[option]
-    response = nsi.provisional_booking_request(unique_ns_id, selected_journey, 0, 2)
+    number_of_passengers = int(database.get_composition(session['user']['userId']))
+    response = nsi.provisional_booking_request(unique_ns_id, selected_journey, 0, number_of_passengers)
     gotourl = 'https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature=' \
               + response['data']['signature']
     database.add_journey(selected_journey, session['user']['userId'], 0)
@@ -264,11 +265,12 @@ def get_cheapest_option_from_server(intent):
 def book_cheapest_option(session):
     global cheapest_journey, unique_ns_id
     cheapest_journey.cheapest_journey_boolean = False
+    number_of_passengers = database.get_composition(session['user']['userId'])
     timetable = nsi.get_price_and_time_response(cheapest_journey.origin, cheapest_journey.destination,
-                                                cheapest_journey.date, cheapest_journey.time, 2, 'departure')
+                                                cheapest_journey.date, cheapest_journey.time, number_of_passengers, 'departure')
     journey = timetable['data']['connections'][0]
     unique_ns_id = timetable['data']['uid']
-    response = nsi.provisional_booking_request(unique_ns_id, journey, 0, 2)
+    response = nsi.provisional_booking_request(unique_ns_id, journey, 0, number_of_passengers)
     gotourl = 'https://www.nsinternational.nl/en/traintickets#/passengers/' + response['data']['dnrId'] + '?signature='\
               + response['data']['signature']
     database.add_journey(journey, session['user']['userId'], 0)
